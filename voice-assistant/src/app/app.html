@@ -1,0 +1,43 @@
+<!-- <main class="main"><app-voice-assistant></app-voice-assistant></main> -->
+<div class="chat">
+  <header>
+    <h2>Angular Voice Assistant</h2>
+    <div class="actions">
+      <button (click)="clearHistory()">🧹 Clear</button>
+    </div>
+  </header>
+
+  <main>
+    <div
+      class="message"
+      *ngFor="let m of messages"
+      [class.user]="m.role === 'user'"
+      [class.assistant]="m.role === 'assistant'"
+    >
+      <div class="bubble" [innerHTML]="m.text | nl2br"></div>
+      <div class="time">{{ m.time | date : 'shortTime' }}</div>
+    </div>
+
+    <div *ngIf="interim" class="message user faint">
+      <div class="bubble">{{ interim }}</div>
+      <div class="time">listening…</div>
+    </div>
+
+    <div *ngIf="typing" class="message assistant">
+      <div class="bubble typing"><span></span><span></span><span></span></div>
+    </div>
+  </main>
+
+  <footer [formGroup]="chatForm">
+    <input
+      type="text"
+      placeholder="Type your message..."
+      formControlName="prompt"
+      (keyup.enter)="send()"
+    />
+    <button (click)="send()" [disabled]="chatForm.invalid">Send</button>
+    <button (click)="listening ? stopListening() : startListening()">
+      {{ listening ? '⏹ Stop' : '🎤 Voice' }}
+    </button>
+  </footer>
+</div>

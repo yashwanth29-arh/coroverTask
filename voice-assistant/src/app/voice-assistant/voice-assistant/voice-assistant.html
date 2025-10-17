@@ -1,0 +1,79 @@
+<div class="chat-app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🗣️</div>
+      <div>
+        <h2>Voice Assistant</h2>
+        <small class="muted">Demo — Chat style UI</small>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn" (click)="clearHistory()">Clear</button>
+      <button
+        class="btn mic"
+        (click)="listening ? stopListening() : startListening()"
+        [disabled]="!speech.isSupported"
+      >
+        <span *ngIf="!listening">🎤 Voice</span>
+        <span *ngIf="listening">⏹ Stop</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="chat-window" id="chatWindow">
+    <div class="messages">
+      <ng-container *ngFor="let m of messages">
+        <div
+          [ngClass]="{
+            'message-row': true,
+            user: m.role === 'user',
+            assistant: m.role === 'assistant'
+          }"
+        >
+          <div class="avatar" *ngIf="m.role === 'assistant'">🤖</div>
+
+          <div class="bubble">
+            <div
+              class="bubble-text"
+              [innerHTML]="
+                m.text
+                  ? (m.text | nl2br)
+                  : assistantTyping && m.role === 'assistant'
+                  ? '<span class=typing><span></span><span></span><span></span></span>'
+                  : ''
+              "
+            ></div>
+            <div class="meta">{{ formatTime(m.time) }}</div>
+          </div>
+
+          <div class="avatar right" *ngIf="m.role === 'user'">🙂</div>
+        </div>
+      </ng-container>
+
+      <!-- live interim transcript shown as faint bubble -->
+      <div *ngIf="interim" class="message-row user">
+        <div class="avatar right">🙂</div>
+        <div class="bubble faint">
+          <div class="bubble-text">{{ interim }}</div>
+          <div class="meta">listening…</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="composer">
+    <div class="input-wrap">
+      <textarea
+        rows="1"
+        placeholder="Type a message or press Voice"
+        [(ngModel)]="inputText"
+        (keydown.enter)="sendText(); $event.preventDefault()"
+      ></textarea>
+      <button class="send" (click)="sendText()" [disabled]="!(inputText || interim)">Send</button>
+    </div>
+    <div class="hints">
+      <small class="muted" *ngIf="supportMsg">{{ supportMsg }}</small>
+    </div>
+  </footer>
+</div>
