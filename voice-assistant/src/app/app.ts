@@ -69,12 +69,16 @@ export class App implements OnInit, OnDestroy {
       this.cd.detectChanges();
     });
     setTimeout(() => this.listening = false, 10000);
+    this.cd.detectChanges();
+
   }
 
   stopListening() {
     this.speech.stop();
     this.listening = false;
     this.interim = '';
+    this.cd.detectChanges();
+
   }
 
   async send() {

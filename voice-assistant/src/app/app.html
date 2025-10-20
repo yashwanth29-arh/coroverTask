@@ -1,9 +1,8 @@
-<!-- <main class="main"><app-voice-assistant></app-voice-assistant></main> -->
 <div class="chat">
   <header>
     <h2>Angular Voice Assistant</h2>
     <div class="actions">
-      <button (click)="clearHistory()">🧹 Clear</button>
+      <button (click)="clearHistory()">Clear</button>
     </div>
   </header>
 
@@ -37,7 +36,7 @@
     />
     <button (click)="send()" [disabled]="chatForm.invalid">Send</button>
     <button (click)="listening ? stopListening() : startListening()">
-      {{ listening ? '⏹ Stop' : '🎤 Voice' }}
+      {{ listening ? 'Stop' : 'Voice' }}
     </button>
   </footer>
 </div>
